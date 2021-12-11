@@ -7,19 +7,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Payment.API.Configurations
+namespace Identity.API.Configurations
 {
-    public class JwtSettings
-    {
-        public string Secret { get; set; }
-
-        public string Issuer { get; set; }
-    }
-
     public static class AuthConfigurations
     {
         public static void AddCustomAuthorization(this IServiceCollection services, IConfiguration configuration)
-        {   
+        {
+            var jwtSettings = new JwtSettings();
+            configuration.Bind(nameof(jwtSettings), jwtSettings);
+
+            services.AddSingleton(jwtSettings);
+
             services.AddAuthentication(opt =>
             {
                 opt.DefaultChallengeScheme = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme;
@@ -27,17 +25,14 @@ namespace Payment.API.Configurations
             })
             .AddJwtBearer(opt =>
             {
-                opt.TokenValidationParameters = GetTokenValidationParameters(configuration);
+                opt.TokenValidationParameters = GetTokenValidationParameters(jwtSettings);
                 opt.RequireHttpsMetadata = false; // Since there is no certificate
                 opt.SaveToken = true;
             });
         }
 
-        public static TokenValidationParameters GetTokenValidationParameters(IConfiguration configuration)
+        public static TokenValidationParameters GetTokenValidationParameters(JwtSettings jwtSettings)
         {
-            var jwtSettings = new JwtSettings();
-            configuration.Bind(nameof(jwtSettings), jwtSettings);
-
             return new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,
