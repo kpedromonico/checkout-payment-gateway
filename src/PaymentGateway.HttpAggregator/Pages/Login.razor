@@ -1,0 +1,46 @@
+﻿@page "/login"
+
+@using PaymentGateway.HttpAggregator.Payloads.IdentityService.Requests
+@using PaymentGateway.HttpAggregator.Services
+@inject IIdentityService IdentityService
+
+<h1>Login</h1>
+
+<EditForm Model="@exampleModel" OnValidSubmit="@HandleSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label>Email</label>
+        <InputText id="email" placeholder="Email" @bind-Value="@exampleModel.Email" />
+    </div>
+
+    <div class="form-group">
+        <label>Password</label>
+        <InputText type="password" id="password" placeholder="Password" @bind-Value="@exampleModel.Password" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        Login
+    </button>
+
+    <NavLink class="btn btn-primary" href="register">
+        Register
+    </NavLink>
+
+</EditForm>
+
+<p>@response</p>
+
+@code {
+
+    private AccountLoginRequest exampleModel = new AccountLoginRequest();
+    private string jwt = string.Empty;
+    private string response = string.Empty;
+
+    private async Task HandleSubmit()
+    {
+        var result = await IdentityService.Login(exampleModel);
+        response = result;
+    }
+}

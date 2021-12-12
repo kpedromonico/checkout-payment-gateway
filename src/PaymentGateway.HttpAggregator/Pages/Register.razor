@@ -1,0 +1,61 @@
+﻿@page "/register"
+
+@using PaymentGateway.HttpAggregator.Payloads.IdentityService.Requests
+@using PaymentGateway.HttpAggregator.Services
+@inject IIdentityService IdentityService
+
+<h1>Register</h1>
+
+<EditForm Model="@exampleModel" OnValidSubmit="@HandleSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label>Email</label>
+        <InputText id="email" placeholder="Email" @bind-Value="@exampleModel.Email" />
+    </div>
+
+    <div class="form-group">
+        <label>FirstName</label>
+        <InputText id="firstName" placeholder="First Name" @bind-Value="@exampleModel.FirstName" />
+    </div>
+
+    <div class="form-group">
+        <label>LastName</label>
+        <InputText id="lastName" placeholder="Last Name" @bind-Value="@exampleModel.LastName" />
+    </div>
+
+    <div class="form-group">
+        <label>Password</label>
+        <InputText id="password" type="password" placeholder="Password" @bind-Value="@exampleModel.Password" />
+    </div>
+
+    <div class="form-group">
+        <label>ConfirmPassword</label>
+        <InputText id="ndPassword" type="password" placeholder="Confirm Password" @bind-Value="@exampleModel.ConfirmPassword" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        Register
+    </button>
+
+    <NavLink class="btn btn-primary" href="login">
+        Login Page
+    </NavLink>
+
+</EditForm>
+
+<p>@response</p>
+
+@code {
+
+    private AccountRegisterRequest exampleModel = new AccountRegisterRequest();
+    private string jwt = string.Empty;
+    private string response = string.Empty;
+
+    private async Task HandleSubmit()
+    {
+        var result = await IdentityService.Register(exampleModel);
+        response = result;
+    }
+}

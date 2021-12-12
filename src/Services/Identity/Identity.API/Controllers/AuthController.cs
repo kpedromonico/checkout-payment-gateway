@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentValidation;
@@ -34,8 +35,9 @@ namespace Identity.API.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] AccountRegisterRequest payload)
+        public async Task<IActionResult> Register(AccountRegisterRequest payload)
         {
+            System.Console.WriteLine(JsonSerializer.Serialize(payload));
             var validationResult = _registerValidator.Validate(payload);
             if(!validationResult.IsValid)
             {
@@ -51,7 +53,7 @@ namespace Identity.API.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] AccountLoginRequest payload)
+        public async Task<IActionResult> Login(AccountLoginRequest payload)
         {
             var validationResult = _loginValidator.Validate(payload);
             if(!validationResult.IsValid)
