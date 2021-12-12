@@ -18,12 +18,14 @@ namespace PaymentGateway.HttpAggregator
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IWebHostEnvironment env, IConfiguration configuration)
         {
             Configuration = configuration;
+            Environment = env;
         }
 
         public IConfiguration Configuration { get; }
+        public IWebHostEnvironment Environment { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
@@ -34,24 +36,41 @@ namespace PaymentGateway.HttpAggregator
 
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddSingleton<WeatherForecastService>(); // drop
 
             services.AddHttpClient<IIdentityService, IdentityService>(x =>
             {
-                //x.BaseAddress = new Uri("http://localhost:5004/api/");
-                x.BaseAddress = new Uri("http://acme.com/api/");
+                if(Environment.IsDevelopment())
+                {
+                    x.BaseAddress = new Uri("http://localhost:5004/api/");
+                }
+                else
+                {
+                    x.BaseAddress = new Uri("http://acme.com/api/");
+                }
             });
 
             services.AddHttpClient<IBankService, BankService>(x => 
             {
-                x.BaseAddress = new Uri("http://acme.com/api/");
-                //x.BaseAddress = new Uri("http://localhost:6000/api/");
+                if (Environment.IsDevelopment())
+                {
+                    x.BaseAddress = new Uri("http://localhost:6000/api/");
+                }
+                else
+                {
+                    x.BaseAddress = new Uri("http://acme.com/api/");
+                }                
             });
 
             services.AddHttpClient<IPaymentService, PaymentService>(x =>
             {
-                x.BaseAddress = new Uri("http://acme.com/api/");
-                //x.BaseAddress = new Uri("http://localhost:6000/api/");
+                if (Environment.IsDevelopment())
+                {
+                    x.BaseAddress = new Uri("http://localhost:5000/api/");
+                }
+                else
+                {
+                    x.BaseAddress = new Uri("http://acme.com/api/");
+                }
             });
 
         }

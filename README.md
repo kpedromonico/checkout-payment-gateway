@@ -101,10 +101,19 @@ All up-to-date docker images are hosted on my personal DockerHub (kpedromonico).
 ### Web Aggregator
 
 If you want to load the HttpAggregator.
-Open a terminal instance, navigate [here](src/PaymentGateway.HttpAggregator) and run:
+Open a terminal instance, navigate [here](src/PaymentGateway.HttpAggregator).
+
+On the options above, if you are using `#1 - .BAT File` run:
 
 ```
-dotnet run
+dotnet run --launch-profile PaymentGateway.HttpAggregator-Development
+```
+
+
+On the options above, if you are using `#2 - K8S (Kubernetes)` run:
+
+```
+dotnet run --launch-profile PaymentGateway.HttpAggregator-Production
 ```
 
 It should load the following [window](images/webaggregator-login.png).
@@ -116,6 +125,29 @@ To run the unit tests navigate [here](src\Services\Payment\Payment.UnitTests) an
 ```
 dotnet test
 ```
+
+### Swagger and JWT
+
+In order to run calls through swagger, you will need first to get a JWT, through the Identity services (or through the web aggregator login page).
+
+The token returned from the Identity Service should look like this:
+`{
+	"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJLYWlvUGVkcm9tb25pY28iLCJqdGkiOiI4OGNkYjRkNS04YjA5LTRjY2ItOWZiMi02ZGUzM2VkN2RhNjQiLCJlbWFpbCI6ImtwZWRyb21vbmljb0BnbWFpbC5jb20iLCJpZCI6ImtwZWRyb21vbmljb0BnbWFpbC5jb20iLCJuYmYiOjE2MzkzMzEzNjgsImV4cCI6MTYzOTMzNDk2OCwiaWF0IjoxNjM5MzMxMzY4LCJpc3MiOiJJQW1Bbklzc3VpbmdBdXRob3JpdHkuY29tIiwiYXVkIjoicGF5bWVudHMifQ.m90FivXO084t7aybODfn-nLCz9gg6BIQXHFrSPIg81w",
+	"errorMessages": null
+}`
+
+Copy everything after the token property `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJLYWlvUGVkcm9tb25pY28iLCJqdGkiOiI4OGNkYjRkNS04YjA5LTRjY2ItOWZiMi02ZGUzM2VkN2RhNjQiLCJlbWFpbCI6ImtwZWRyb21vbmljb0BnbWFpbC5jb20iLCJpZCI6ImtwZWRyb21vbmljb0BnbWFpbC5jb20iLCJuYmYiOjE2MzkzMzEzNjgsImV4cCI6MTYzOTMzNDk2OCwiaWF0IjoxNjM5MzMxMzY4LCJpc3MiOiJJQW1Bbklzc3VpbmdBdXRob3JpdHkuY29tIiwiYXVkIjoicGF5bWVudHMifQ.m90FivXO084t7aybODfn-nLCz9gg6BIQXHFrSPIg81w`.
+
+Open a swagger page (usually is the host name you are running + `/swagger/index.html`) e.g. `https://localhost:5001/swagger/index.html`.
+
+Click on the button `Authorize` (on the top right corner). It has a padlock icon, quite easy to spot.
+
+Then enter the following:
+
+```
+Bearer <JWT>
+```
+- Replace `<JWT>` with your token.
 
 ---
 
