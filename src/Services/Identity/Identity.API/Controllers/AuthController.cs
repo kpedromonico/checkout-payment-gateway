@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -35,6 +36,8 @@ namespace Identity.API.Controllers
         }
 
         [HttpPost("register")]
+        [ProducesResponseType(typeof(AccountResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(AccountResponse), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Register(AccountRegisterRequest payload)
         {
             System.Console.WriteLine(JsonSerializer.Serialize(payload));
@@ -53,6 +56,8 @@ namespace Identity.API.Controllers
         }
 
         [HttpPost("login")]
+        [ProducesResponseType(typeof(AccountResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(AccountResponse), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Login(AccountLoginRequest payload)
         {
             var validationResult = _loginValidator.Validate(payload);

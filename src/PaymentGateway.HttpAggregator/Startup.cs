@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using PaymentGateway.HttpAggregator.Configurations;
 using PaymentGateway.HttpAggregator.Data;
 using PaymentGateway.HttpAggregator.Services;
 using System;
@@ -27,10 +28,9 @@ namespace PaymentGateway.HttpAggregator
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Checkout-Http Aggregator", Version = "v1" });
-            });
+            services.AddCustomAuthorization(Configuration);
+
+            services.AddSwagger();
 
             services.AddRazorPages();
             services.AddServerSideBlazor();
@@ -47,7 +47,13 @@ namespace PaymentGateway.HttpAggregator
                 x.BaseAddress = new Uri("http://acme.com/api/");
                 //x.BaseAddress = new Uri("http://localhost:6000/api/");
             });
-            
+
+            services.AddHttpClient<IPaymentService, PaymentService>(x =>
+            {
+                x.BaseAddress = new Uri("http://acme.com/api/");
+                //x.BaseAddress = new Uri("http://localhost:6000/api/");
+            });
+
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -62,17 +68,14 @@ namespace PaymentGateway.HttpAggregator
                 app.UseHsts();
             }
 
-            app.UseSwagger();
+            app.UseCustomSwagger();
 
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Checkout-Http Aggregator - V1");
-            });
-
-            // app.UseHttpsRedirection();
+            // app.UseHttpsRedirection(); there is no valid certificate on the k8s deploy, so commenting this out
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.ConfigureAuthentication();
 
             app.UseEndpoints(endpoints =>
             {

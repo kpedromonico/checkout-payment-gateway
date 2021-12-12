@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Payment.API.Application.Payloads.Reponses
+namespace PaymentGateway.HttpAggregator.Payloads.PaymentService.Responses
 {
     public class PaymentDetailsResponse
     {
