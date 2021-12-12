@@ -46,6 +46,8 @@ namespace Payment.API.Application.Services
             else
             {
                 // bank service is unresponsive, send it to a message queue for background processing (to attempt it once again)
+                // the idea is basically 
+                // if (transaction.Success == null) => A different service should capture that and reprocess
             }
 
             transaction.SetTransactionOwner(userId);

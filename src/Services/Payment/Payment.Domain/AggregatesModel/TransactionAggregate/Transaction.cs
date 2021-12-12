@@ -1,3 +1,4 @@
+using Payment.Domain.Exceptions;
 using Payment.Domain.SeedWork;
 using System;
 
@@ -23,11 +24,21 @@ namespace Payment.Domain.AggregatesModel.TransactionAggregate
         {
             UserId = userId;
 
+            if(Card == null)
+            {
+                throw new NullableCardException("Transaction cannot exist without a card");
+            }
+
             // If the card doesn't exist yet, add a new owner to it
-            if(string.IsNullOrEmpty(Card?.UserId))
+            if(string.IsNullOrEmpty(Card.UserId))
             {
                 Card.SetCardOwner(userId);
             }
+        }
+
+        public void SetCard(Card card)
+        {
+            Card = card;
         }
 
         public void ApproveTransaction()

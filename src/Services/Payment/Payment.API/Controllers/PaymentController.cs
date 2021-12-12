@@ -20,8 +20,7 @@ namespace Payment.API.Controllers
     [Authorize]
     [Route("api/[controller]")]
     public class PaymentController : ControllerBase
-    {
-        // https://stackoverflow.com/questions/21554977/should-services-always-return-dtos-or-can-they-also-return-domain-models
+    {   
         private readonly IIdentityService _identityService;
         private readonly IValidator<PaymentAttemptRequest> _paymentRequestValidator;
         private readonly IPaymentService _paymentService;
