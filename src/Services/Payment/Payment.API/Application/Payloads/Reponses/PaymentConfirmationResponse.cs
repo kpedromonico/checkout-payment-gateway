@@ -11,7 +11,7 @@ namespace Payment.API.Application.Payloads.Reponses
 
         public string CardNumber { get; set; }
 
-        public bool Approved { get; set; }
+        public bool? Approved { get; set; }
 
         public decimal Amount { get; set; }        
 

@@ -23,16 +23,25 @@ namespace Payment.API.Infrastructure.Services
 
         public async Task<bool?> ProcessTransaction(Transaction transaction)
         {
-            var httpContent = new StringContent(
-                JsonSerializer.Serialize(transaction.Card),
-                Encoding.UTF8,
-                "application/json"
-            );
+            try
+            {
+                var httpContent = new StringContent(
+                    JsonSerializer.Serialize(transaction.Card),
+                    Encoding.UTF8,
+                    "application/json"
+                );
 
-            var response = await _httpClient                
-                .PostAsync(_configuration["BankService"], httpContent);
+                var response = await _httpClient
+                    .PostAsync(_configuration["BankService"], httpContent);
 
-            return response.IsSuccessStatusCode;
+                return response.IsSuccessStatusCode;
+            }
+            catch
+            {
+                // the service is unavailable
+                Console.WriteLine("--> Bank Service is unresponsive");
+                return null;
+            }
         }
     }
 }

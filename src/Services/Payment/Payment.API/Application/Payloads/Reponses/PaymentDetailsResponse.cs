@@ -13,7 +13,7 @@ namespace Payment.API.Application.Payloads.Reponses
 
         public string Currency { get; set; }
 
-        public bool Approved { get; protected set; }
+        public bool? Approved { get; protected set; }
 
         public DateTime TransactionDate { get; set; }
     }

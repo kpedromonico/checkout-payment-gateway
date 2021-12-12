@@ -59,7 +59,7 @@ namespace Identity.API
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection(); -> Disabling to avoid cert error when inside docker
             app.UseStaticFiles();
 
             app.UseRouting();

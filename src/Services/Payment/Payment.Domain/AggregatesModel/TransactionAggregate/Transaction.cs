@@ -15,7 +15,7 @@ namespace Payment.Domain.AggregatesModel.TransactionAggregate
 
         public string Currency { get; set; }
 
-        public bool Sucess { get; protected set; }
+        public bool? Sucess { get; protected set; }
 
         public DateTime CreationDate { get; set; } = DateTime.UtcNow;
 

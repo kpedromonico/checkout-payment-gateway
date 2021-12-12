@@ -42,7 +42,7 @@ namespace Bank.API
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Bank.API v1"));
             }
 
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection(); -> Disabling to avoid cert error when inside docker
 
             app.UseRouting();
 

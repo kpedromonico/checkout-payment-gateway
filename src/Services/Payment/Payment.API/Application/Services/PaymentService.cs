@@ -32,13 +32,20 @@ namespace Payment.API.Application.Services
             // Call bank service for validation -> This could be a gRPC call
             var approved = await _bankService.ProcessTransaction(transaction);
 
-            if(approved.Value)
+            if (approved.HasValue) 
             {
-                transaction.ApproveTransaction();                
+                if (approved.Value)
+                {
+                    transaction.ApproveTransaction();
+                }
+                else
+                {
+                    transaction.RejectTransaction();
+                }
             }
             else
             {
-                transaction.RejectTransaction();                
+                // bank service is unresponsive, send it to a message queue for background processing (to attempt it once again)
             }
 
             transaction.SetTransactionOwner(userId);
